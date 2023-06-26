@@ -6,6 +6,11 @@ import { exclude } from '@/utils/prisma-utils';
 import userRepository from '@/repositories/user-repository';
 import sessionRepository from '@/repositories/session-repository';
 
+async function validatePasswordOrFail(password: string, userPassword: string) {
+  const isPasswordValid = await bcrypt.compare(password, userPassword);
+  if (!isPasswordValid) throw invalidCredentialsError();
+}
+
 async function signIn(params: SignInParams): Promise<SignInResult> {
   const { email, password } = params;
 
@@ -38,10 +43,6 @@ async function createSession(userId: number) {
   return token;
 }
 
-async function validatePasswordOrFail(password: string, userPassword: string) {
-  const isPasswordValid = await bcrypt.compare(password, userPassword);
-  if (!isPasswordValid) throw invalidCredentialsError();
-}
 
 export type SignInParams = Pick<User, 'email' | 'password'>;
 

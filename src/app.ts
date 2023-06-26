@@ -6,7 +6,7 @@ import { loadEnv, connectDb, disconnectDB } from '@/config';
 
 loadEnv();
 
-import { authenticationRouter, usersRouter } from '@/routers';
+import { attendanceRouter, authenticationRouter, usersRouter } from '@/routers';
 import { handleApplicationErrors } from '@/middlewares';
 
 const app = express();
@@ -16,6 +16,7 @@ app
     .get('/health', (_req, res) => res.send('OK!'))
     .use('/user', usersRouter)
     .use('/auth', authenticationRouter)
+    .use('/attendance', attendanceRouter)
     .use(handleApplicationErrors);
 
 export function init(): Promise<Express> {
